@@ -17,7 +17,7 @@ public Plugin myinfo =
 	author = "24",
 	description = "Plugin to send logs.tf previews to a Discord channel.",
 	version = "1.0.0",
-	url = "https://github.com/c43721/payload-webhook"
+	url = "https://github.com/payload-bot/payload-logs-plugin"
 };
 
 public void OnPluginStart()
