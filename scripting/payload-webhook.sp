@@ -17,7 +17,7 @@ ConVar g_hCvarApiUrl;
 public Plugin myinfo =
 {
 	name = "payload-webhook",
-	author = "24",
+	author = "24, Bv",
 	description = "Plugin to send logs.tf previews to a Discord channel.",
 	version = VERSION,
 	url = "https://github.com/payload-bot/payload-logs-plugin"
