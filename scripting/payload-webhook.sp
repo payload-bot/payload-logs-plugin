@@ -75,7 +75,7 @@ public void SendRequest(const char[] logid, const char[] fullApiUrl)
 {
 	AnyHttpForm form = AnyHttp.CreatePost(fullApiUrl);
 	
-	form.PutString("logid", logid);
+	form.PutString("logsId", logid);
 	form.PutString("token", g_sWebhookToken);
 	form.PutString("requester", VERSION);
 
@@ -84,7 +84,7 @@ public void SendRequest(const char[] logid, const char[] fullApiUrl)
 
 public void SendRequest_Complete(bool success, const char[] contents, int metadata) 
 {
-	if(success)
+	if (success)
 	{
 		PrintToChatAll("[Payload] Log preview uploaded");
 		PrintToServer("[Payload] Log preview uploaded");
