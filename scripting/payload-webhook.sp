@@ -60,7 +60,7 @@ public int LogUploaded(bool success, const char[] logid, const char[] url)
 		GetConVarString(g_hCvarApiUrl, BaseUrl, sizeof(BaseUrl));
 
 		// Complete the baseUrl
-		Format(FullUrl, sizeof(FullUrl), "%s/webhook/v1/logs", BaseUrl);
+		Format(FullUrl, sizeof(FullUrl), "%s/webhook/v1/internal/logs", BaseUrl);
 
 		// For debug purposes:
 		PrintToServer("FullURL: %s", FullUrl);
