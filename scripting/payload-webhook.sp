@@ -1,12 +1,12 @@
 #include <sourcemod>
 #include <sdktools>
 #include <sdkhooks>
-#include <anyhttp>
 #include <logstf>
+#include <SteamWorks>
 #pragma newdecls required
 #pragma semicolon 1
 
-#define VERSION "1.0.0"
+#define VERSION "1.0.1"
 
 char g_sWebhookToken[128];
 
@@ -60,7 +60,7 @@ public int LogUploaded(bool success, const char[] logid, const char[] url)
 		GetConVarString(g_hCvarApiUrl, BaseUrl, sizeof(BaseUrl));
 
 		// Complete the baseUrl
-		Format(FullUrl, sizeof(FullUrl), "%s/webhook/v1/internal/logs", BaseUrl);
+		Format(FullUrl, sizeof(FullUrl), "%s/webhooks/v1/internal/logs", BaseUrl);
 
 		// For debug purposes:
 		PrintToServer("FullURL: %s", FullUrl);
@@ -73,25 +73,25 @@ public int LogUploaded(bool success, const char[] logid, const char[] url)
 
 public void SendRequest(const char[] logid, const char[] fullApiUrl)
 {
-	AnyHttpForm form = AnyHttp.CreatePost(fullApiUrl);
+	Handle hRequest = SteamWorks_CreateHTTPRequest(k_EHTTPMethodPOST,fullApiUrl);
+	SteamWorks_SetHTTPRequestHeaderValue(hRequest,"Content-Type","x-www-form-urlencoded");
+	SteamWorks_SetHTTPRequestGetOrPostParameter(hRequest, "token", g_sWebhookToken);
+	SteamWorks_SetHTTPRequestGetOrPostParameter(hRequest, "logsId", logid);
+	SteamWorks_SetHTTPRequestGetOrPostParameter(hRequest, "requester", VERSION);
+	SteamWorks_SetHTTPCallbacks(hRequest, OnSteamWorksHTTPComplete);
+	SteamWorks_SendHTTPRequest(hRequest);
 	
-	form.PutString("logsId", logid);
-	form.PutString("token", g_sWebhookToken);
-	form.PutString("requester", VERSION);
-
-	form.Send(SendRequest_Complete);
 }
-
-public void SendRequest_Complete(bool success, const char[] contents, int metadata) 
-{
-	if (success)
+public int OnSteamWorksHTTPComplete(Handle hRequest, bool bFailure, bool bRequestSuccessful, EHTTPStatusCode eStatusCode, any data) {
+	if (bFailure){
+		PrintToChatAll("[Payload] Unable to post logs preview");
+		PrintToServer("[Payload] Unable to post logs preview");
+		PrintToServer("Status Code: %i",eStatusCode);
+	}
+	else
 	{
 		PrintToChatAll("[Payload] Log preview uploaded");
 		PrintToServer("[Payload] Log preview uploaded");
 	}
-	else 
-	{
-		PrintToChatAll("[Payload] Unable to post logs preview");
-		PrintToServer("[Payload] Unable to post logs preview");
-	}
+	delete hRequest;
 }
