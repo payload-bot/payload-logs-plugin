@@ -36,14 +36,16 @@ public void OnPluginStart()
 	PrintToServer("[Payload] Plugin loaded.");
 }
 
-public Action testUpload(int client, int args){
+public Action testUpload(int client, int args)
+{
 	LogUploaded(true, "2961236", "https://logs.tf/2961236");
 	return Plugin_Handled;
 }
 
 public int LogUploaded(bool success, const char[] logid, const char[] url) 
 {
-    if (success) {
+    if (success) 
+	{
 		bool sendRequest = GetConVarBool(g_hCvarSendLogs);
 		if (sendRequest == false) 
 			return;
@@ -73,25 +75,32 @@ public int LogUploaded(bool success, const char[] logid, const char[] url)
 
 public void SendRequest(const char[] logid, const char[] fullApiUrl)
 {
-	Handle hRequest = SteamWorks_CreateHTTPRequest(k_EHTTPMethodPOST,fullApiUrl);
-	SteamWorks_SetHTTPRequestHeaderValue(hRequest,"Content-Type","x-www-form-urlencoded");
-	SteamWorks_SetHTTPRequestGetOrPostParameter(hRequest, "token", g_sWebhookToken);
+	Handle hRequest = SteamWorks_CreateHTTPRequest(k_EHTTPMethodPOST, fullApiUrl);
+
+	// Headers
+	SteamWorks_SetHTTPRequestHeaderValue(hRequest, "Content-Type", "x-www-form-urlencoded");
+	SteamWorks_SetHTTPRequestHeaderValue(hRequest, "Authorization", g_sWebhookToken);
+
+	// Body
 	SteamWorks_SetHTTPRequestGetOrPostParameter(hRequest, "logsId", logid);
-	SteamWorks_SetHTTPRequestGetOrPostParameter(hRequest, "requester", VERSION);
+	
 	SteamWorks_SetHTTPCallbacks(hRequest, OnSteamWorksHTTPComplete);
 	SteamWorks_SendHTTPRequest(hRequest);
-	
 }
-public int OnSteamWorksHTTPComplete(Handle hRequest, bool bFailure, bool bRequestSuccessful, EHTTPStatusCode eStatusCode, any data) {
-	if (bFailure){
+
+public int OnSteamWorksHTTPComplete(Handle hRequest, bool bFailure, bool bRequestSuccessful, EHTTPStatusCode eStatusCode, any data) 
+{
+	if (bFailure) 
+	{
 		PrintToChatAll("[Payload] Unable to post logs preview");
 		PrintToServer("[Payload] Unable to post logs preview");
-		PrintToServer("Status Code: %i",eStatusCode);
+		PrintToServer("Status Code: %i", eStatusCode);
 	}
 	else
 	{
 		PrintToChatAll("[Payload] Log preview uploaded");
 		PrintToServer("[Payload] Log preview uploaded");
 	}
+	
 	delete hRequest;
 }
