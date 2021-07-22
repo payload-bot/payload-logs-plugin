@@ -40,7 +40,12 @@ public Action TestUpload(int client, int args)
 {
 	bool sendRequest = GetConVarBool(g_hCvarSendLogs);
 	if (sendRequest == false) 
+	{
+		PrintToChatAll("[Payload] sm_payload_send is 0, not sending requests.");
+		PrintToServer("[Payload] sm_payload_send is 0, not sending requests.");
+		
 		return Plugin_Handled;
+	}
 
 	// Make sure we update the string value of the token
 	GetConVarString(g_hCvarWebhookToken, g_sWebhookToken, sizeof(g_sWebhookToken));
@@ -55,12 +60,10 @@ public Action TestUpload(int client, int args)
 	GetConVarString(g_hCvarApiUrl, BaseUrl, sizeof(BaseUrl));
 
 	// Complete the baseUrl
-	Format(FullUrl, sizeof(FullUrl), "%s/webhooks/v1/internal/logs", BaseUrl);
+	Format(FullUrl, sizeof(FullUrl), "%s/webhooks/v1/internal/test", BaseUrl);
 
-	// For debug purposes:
-	PrintToServer("FullURL: %s", FullUrl);
-	PrintToServer("[Payload] Rendering logs preview...");
-	PrintToChatAll("[Payload] Rendering logs preview...");
+	PrintToServer("[Payload] Testing webhook...");
+	PrintToChatAll("[Payload] Testing webhook...");
 
 	SendTestRequest(FullUrl);
 		
@@ -129,14 +132,14 @@ public int OnSteamWorksHTTPComplete(Handle hRequest, bool bFailure, bool bReques
 {
 	if (bFailure) 
 	{
-		PrintToChatAll("[Payload] Unable to post logs preview");
-		PrintToServer("[Payload] Unable to post logs preview");
+		PrintToChatAll("[Payload] Unable to post logs preview.");
+		PrintToServer("[Payload] Unable to post logs preview.");
 		PrintToServer("Status Code: %i", eStatusCode);
 	}
 	else
 	{
-		PrintToChatAll("[Payload] Log preview uploaded");
-		PrintToServer("[Payload] Log preview uploaded");
+		PrintToChatAll("[Payload] Log preview uploaded.");
+		PrintToServer("[Payload] Log preview uploaded.");
 	}
 	
 	delete hRequest;
@@ -146,14 +149,14 @@ public int TestWebhookComplete(Handle hRequest, bool bFailure, bool bRequestSucc
 {
 	if (bFailure) 
 	{
-		PrintToChatAll("[Payload] Unable to test webhook");
-		PrintToServer("[Payload] Unable to test preview");
+		PrintToChatAll("[Payload] Unable to test webhook.");
+		PrintToServer("[Payload] Unable to test preview.");
 		PrintToServer("Status Code: %i", eStatusCode);
 	}
 	else
 	{
-		PrintToChatAll("[Payload] Webhook test successful");
-		PrintToServer("[Payload] Webhook test successful");
+		PrintToChatAll("[Payload] Webhook test successful.");
+		PrintToServer("[Payload] Webhook test successful.");
 	}
 	
 	delete hRequest;
