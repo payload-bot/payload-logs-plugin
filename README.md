@@ -25,10 +25,10 @@ SourceMod plugin to allow sending logs.tf previews to a Discord channel through 
 2. Restart the server or type `sm plugins load payload-webhook` in the console to load the plugin.
 3. The config file will be automatically generated in cfg/sourcemod/
 4. [Grab your webhook token](https://payload.tf/settings)
-5. Set the convar `payload_webhook_token` to the token gained above
+5. Set the convar `sm_payload_token` to the token gained above
    You're set! You should now recieve logs.tf previews when logs.tf uploads a log successfully.
 
-If you wish to disable the previews, you can set the `payload_send` convar to `0`.
+If you wish to disable the previews, you can set the `sm_payload_send` convar to `0`.
 
 # Issues, Questions
 
