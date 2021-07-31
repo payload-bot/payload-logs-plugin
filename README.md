@@ -30,6 +30,8 @@ SourceMod plugin to allow sending logs.tf previews to a Discord channel through 
 
 If you wish to disable the previews, you can set the `sm_payload_send` convar to `0`.
 
+To test that the webhook works, you may use the command `sm_payload_test`.
+
 # Issues, Questions
 
 Any issues or questions should be posted on GitHub issues, where they can be more easily tracked. Feature requests are welcome!
