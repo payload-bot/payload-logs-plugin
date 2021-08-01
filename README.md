@@ -17,7 +17,7 @@ SourceMod plugin to allow sending logs.tf previews to a Discord channel through 
 ## Requirements
 
 -   Sourcemod and Metamod
--   cURL
+-   SteamTools (Not included in the releases yet)
 
 ## Installation
 
