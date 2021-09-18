@@ -31,7 +31,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: payload-webhook
-          path: compiled/payload-webhook.smx
+          path: payload-webhook.smx
           if-no-files-found: error
 
       - uses: "marvinpinto/action-automatic-releases@latest"

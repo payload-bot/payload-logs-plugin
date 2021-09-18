@@ -30,7 +30,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: payload-webhook
-          path: scripting/payload-webhook.smx
+          path: payload-webhook.smx
           if-no-files-found: error
 
       - uses: "marvinpinto/action-automatic-releases@latest"
@@ -40,6 +40,6 @@ jobs:
           prerelease: true
           title: "Beta"
           files: |
-            scripting/payload-webhook.smx
+            payload-webhook.smx
             logstf.inc
             SteamWorks.inc
