@@ -8,7 +8,6 @@ on:
 
 jobs:
   pre-release:
-    needs: build
     name: "Pre Release"
     runs-on: "ubuntu-latest"
 
