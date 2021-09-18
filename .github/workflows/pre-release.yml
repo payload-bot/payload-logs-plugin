@@ -41,5 +41,5 @@ jobs:
           title: "Beta"
           files: |
             payload-webhook.smx
-            logstf.inc
-            SteamWorks.inc
+            scripting/include/logstf.inc
+            scripting/include/SteamWorks.inc

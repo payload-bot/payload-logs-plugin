@@ -41,5 +41,5 @@ jobs:
           prerelease: false
           files: |
             *.smx
-            logstf.inc
-            SteamWorks.inc
+            scripting/include/logstf.inc
+            scripting/include/SteamWorks.inc
