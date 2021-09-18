@@ -1,4 +1,4 @@
-name: Compile with SourceMod
+name: "Compile with SourceMod"
 
 on:
   pull_request:

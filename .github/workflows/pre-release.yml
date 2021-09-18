@@ -1,0 +1,45 @@
+---
+name: "Pre-release"
+
+on:
+  push:
+    branches:
+      - "main"
+
+jobs:
+  pre-release:
+    needs: build
+    name: "Pre Release"
+    runs-on: "ubuntu-latest"
+
+    steps:
+
+      - name: Setup SP
+        uses: rumblefrog/setup-sp@v1.0.1
+
+      - name: Compile plugins
+        run: |
+          for file in scripting/${plugin_name}*.sp
+          do
+            echo -e "\nCompiling $file..."
+            spcomp -w234 -O2 -v2 -i ./scripting/include $file -D compiled
+          done
+        working-directory: ${{ github.workspace }}
+
+      - name: Upload compiled plugin
+        uses: actions/upload-artifact@v2
+        with:
+          name: payload-webhook
+          path: compiled/payload-webhook.smx
+          if-no-files-found: error
+
+      - uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "latest"
+          prerelease: true
+          title: "Beta"
+          files: |
+            *.smx
+            logstf.inc
+            SteamWorks.inc
