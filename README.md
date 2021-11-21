@@ -14,10 +14,12 @@
 
 SourceMod plugin to allow sending logs.tf previews to a Discord channel through the Payload API.
 
+Current version: 1.2.0
+
 ## Requirements
 
--   Sourcemod and Metamod
--   SteamWorks and logstf .inc files (included in releases)
+- Sourcemod and Metamod
+- SteamWorks and logstf .inc files (included in releases)
 
 ## Installation
 
@@ -44,13 +46,13 @@ Before contributing, please make sure no one else has stated against your propos
 
 # Useful Links
 
--   [Main Page](https://payload.tf/)
--   [Invite](https://payload.tf/invite)
--   [Discord](https://payload.tf/discord)
--   [Documentation](https://payload.tf/docs)
--   [Translation](https://crowdin.com/project/payload)
--   [Feature Board](https://w.supra.tf/b/LmzrWQviWCRcGxywq/payload)
--   [Changelog](https://github.com/c43721/payload-neo/blob/master/changelog.md)
+- [Main Page](https://payload.tf/)
+- [Invite](https://payload.tf/invite)
+- [Discord](https://payload.tf/discord)
+- [Documentation](https://payload.tf/docs)
+- [Translation](https://crowdin.com/project/payload)
+- [Feature Board](https://w.supra.tf/b/LmzrWQviWCRcGxywq/payload)
+- [Changelog](https://github.com/c43721/payload-neo/blob/master/changelog.md)
 
 # License
 
