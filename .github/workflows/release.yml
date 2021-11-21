@@ -36,9 +36,9 @@ jobs:
       - uses: "marvinpinto/action-automatic-releases@latest"
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          tag: ${{ github.ref }}
+          automatic_release_tag: ${{ github.ref }}
           prerelease: false
           files: |
-            *.smx
+            payload-webhook.smx
             scripting/include/logstf.inc
             scripting/include/SteamWorks.inc
