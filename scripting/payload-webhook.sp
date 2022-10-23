@@ -6,7 +6,7 @@
 #pragma newdecls required
 #pragma semicolon 1
 
-#define VERSION "1.1.0"
+#define VERSION "1.3.0"
 
 char g_sWebhookToken[128];
 
@@ -60,7 +60,7 @@ public Action TestUpload(int client, int args)
 	GetConVarString(g_hCvarApiUrl, BaseUrl, sizeof(BaseUrl));
 
 	// Complete the baseUrl
-	Format(FullUrl, sizeof(FullUrl), "%s/v1/webhooks/test", BaseUrl);
+	Format(FullUrl, sizeof(FullUrl), "%s/webhooks/test", BaseUrl);
 
 	PrintToServer("[Payload] Testing webhook...");
 	PrintToChatAll("[Payload] Testing webhook...");
@@ -90,7 +90,7 @@ public int LogUploaded(bool success, const char[] logid, const char[] url)
 		GetConVarString(g_hCvarApiUrl, BaseUrl, sizeof(BaseUrl));
 
 		// Complete the baseUrl
-		Format(FullUrl, sizeof(FullUrl), "%s/v1/webhooks/logs", BaseUrl);
+		Format(FullUrl, sizeof(FullUrl), "%s/webhooks/logs", BaseUrl);
 
 		// For debug purposes:
 		PrintToServer("FullURL: %s", FullUrl);
