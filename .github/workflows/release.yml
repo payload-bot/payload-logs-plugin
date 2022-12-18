@@ -7,8 +7,7 @@ on:
       - "v*"
 
 jobs:
-  pre-release:
-    needs: build
+  release:
     name: "Release"
     runs-on: "ubuntu-latest"
 
