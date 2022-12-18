@@ -2,13 +2,17 @@
 #include <sdktools>
 #include <sdkhooks>
 #include <logstf>
+#include <demostf>
 #include <SteamWorks>
 #pragma newdecls required
 #pragma semicolon 1
 
-#define VERSION "1.3.0"
+#define VERSION "1.4.0"
 
 char g_sWebhookToken[128];
+bool g_bDemostfLoaded;
+char g_sLogId[128];
+char g_sDemoId[128];
 
 ConVar g_hCvarWebhookToken;
 ConVar g_hCvarSendLogs;
@@ -34,6 +38,33 @@ public void OnPluginStart()
 
 	PrintToChatAll("[Payload] Plugin loaded.");
 	PrintToServer("[Payload] Plugin loaded.");
+}
+
+public void OnAllPluginsLoaded()
+{
+	IsDemosTfPresent();
+}
+
+public bool IsDemosTfPresent()
+{
+	Handle h_demostf = FindPluginByFile("demostf.smx"); 
+	if (h_demostf != null && GetPluginStatus(h_demostf) == Plugin_Running)
+	{
+		char version[64];
+		GetPluginInfo(h_demostf, PlInfo_Version, version, sizeof(version));
+		
+		// Crude way of making sure we're running a version newer than 0.2
+		if (strcmp(version, "0.2") > 0) {
+			g_bDemostfLoaded = true;
+			PrintToServer("[Payload] Demos.tf plugin detected.");
+			return true;
+		}
+	} 
+	else
+	{
+		g_bDemostfLoaded = false;
+		return false;
+	}
 }
 
 public Action TestUpload(int client, int args)
@@ -74,34 +105,53 @@ public int LogUploaded(bool success, const char[] logid, const char[] url)
 {
     if (success) 
 	{
-		bool sendRequest = GetConVarBool(g_hCvarSendLogs);
-		if (sendRequest == false) 
-			return;
-
-		// Make sure we update the string value of the token
-		GetConVarString(g_hCvarWebhookToken, g_sWebhookToken, sizeof(g_sWebhookToken));
-		if (strlen(g_sWebhookToken) == 0) 
-			return;
-
-		char BaseUrl[64];
-		char FullUrl[128];
-
-		// Store convar for the api Url in BaseUrl
-		GetConVarString(g_hCvarApiUrl, BaseUrl, sizeof(BaseUrl));
-
-		// Complete the baseUrl
-		Format(FullUrl, sizeof(FullUrl), "%s/webhooks/logs", BaseUrl);
-
-		// For debug purposes:
-		PrintToServer("FullURL: %s", FullUrl);
-		PrintToServer("[Payload] Rendering logs preview...");
-		PrintToChatAll("[Payload] Rendering logs preview...");
-
-		SendRequest(logid, FullUrl);
+		strcopy(g_sLogId, sizeof(g_sLogId), logid);
+		// Prepare the request if we have received the demoid or if the plugin isn't loaded
+		if (!StrEqual(g_sDemoId, "") || !g_bDemostfLoaded)
+			PrepareRequest();
     }
 }
 
-public void SendRequest(const char[] logid, const char[] fullApiUrl)
+public int DemoUploaded(bool success, const char[] demoid, const char[] url)
+{
+	if (success)
+	{
+		strcopy(g_sDemoId, sizeof(g_sDemoId), demoid);
+	}
+	// Prepare the request if we have received the logid
+	if (!StrEqual(g_sLogId, ""))
+		PrepareRequest();
+}
+
+public void PrepareRequest()
+{
+	bool sendRequest = GetConVarBool(g_hCvarSendLogs);
+	if (sendRequest == false) 
+		return;
+
+	// Make sure we update the string value of the token
+	GetConVarString(g_hCvarWebhookToken, g_sWebhookToken, sizeof(g_sWebhookToken));
+	if (strlen(g_sWebhookToken) == 0) 
+		return;
+
+	char BaseUrl[64];
+	char FullUrl[128];
+
+	// Store convar for the api Url in BaseUrl
+	GetConVarString(g_hCvarApiUrl, BaseUrl, sizeof(BaseUrl));
+
+	// Complete the baseUrl
+	Format(FullUrl, sizeof(FullUrl), "%s/webhooks/logs", BaseUrl);
+
+	// For debug purposes:
+	PrintToServer("FullURL: %s", FullUrl);
+	PrintToServer("[Payload] Rendering logs preview...");
+	PrintToChatAll("[Payload] Rendering logs preview...");
+
+	SendRequest(FullUrl);
+}
+
+public void SendRequest(const char[] fullApiUrl)
 {
 	Handle hRequest = SteamWorks_CreateHTTPRequest(k_EHTTPMethodPOST, fullApiUrl);
 
@@ -110,8 +160,12 @@ public void SendRequest(const char[] logid, const char[] fullApiUrl)
 	SteamWorks_SetHTTPRequestHeaderValue(hRequest, "Authorization", g_sWebhookToken);
 
 	// Body
-	SteamWorks_SetHTTPRequestGetOrPostParameter(hRequest, "logsId", logid);
-	
+	SteamWorks_SetHTTPRequestGetOrPostParameter(hRequest, "logsId", g_sLogId);
+
+	// Only add parameter if the demos.tf plugin was loaded and returned an id
+	if (g_bDemostfLoaded && !StrEqual(g_sDemoId, ""))
+		SteamWorks_SetHTTPRequestGetOrPostParameter(hRequest, "demosId", g_sDemoId);
+
 	SteamWorks_SetHTTPCallbacks(hRequest, OnSteamWorksHTTPComplete);
 	SteamWorks_SendHTTPRequest(hRequest);
 }
@@ -141,7 +195,10 @@ public int OnSteamWorksHTTPComplete(Handle hRequest, bool bFailure, bool bReques
 		PrintToChatAll("[Payload] Log preview uploaded.");
 		PrintToServer("[Payload] Log preview uploaded.");
 	}
-	
+	// Clear the ids
+	g_sDemoId = "";
+	g_sLogId = "";
+
 	delete hRequest;
 }
 
