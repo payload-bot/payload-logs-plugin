@@ -22,11 +22,11 @@ SourceMod plugin to allow sending logs.tf previews to a Discord channel through 
 ## Installation
 
 1. Grab the latest release from the release page and unzip it in your sourcemod folder.
-1. Restart the server, or type `sm plugins load payload-webhook` in the console to load the plugin.
-1. [Grab your webhook token](https://payload.tf/settings)
-1. Set the convar `sm_payload_token` to the token gained above
+2. Restart the server, or type `sm plugins load payload-webhook` in the console to load the plugin.
+3. Get a webhook token from Payload (use the `/webhooks` commands in DMs / in a Discord channel)
+4. Set the convar `sm_payload_token` to the token gained above
 
-You're set! You should now recieve logs.tf previews when logs.tf uploads a log successfully.
+You're set! You should now recieve logs.tf previews when logs.tf uploads a log successfully. If you need to see your token again, there is a `show` command.
 
 If you wish to disable the previews, you can set the `sm_payload_send` convar to `0`. To test that the webhook works, you may use the command `sm_payload_test`.
 
@@ -47,10 +47,7 @@ Before contributing, please make sure no one else has stated against your propos
 -   [Main Page](https://payload.tf/)
 -   [Invite](https://payload.tf/invite)
 -   [Discord](https://payload.tf/discord)
--   [Documentation](https://payload.tf/docs)
 -   [Translation](https://crowdin.com/project/payload)
--   [Feature Board](https://w.supra.tf/b/LmzrWQviWCRcGxywq/payload)
--   [Changelog](https://github.com/c43721/payload-neo/blob/master/changelog.md)
 
 # License
 
